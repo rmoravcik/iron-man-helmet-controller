@@ -8,6 +8,7 @@
 #include <util/delay.h>
 
 #include "common.h"
+#include "eyes.h"
 #include "helmet.h"
 #include "repulsor.h"
 #include "voice.h"
@@ -21,7 +22,10 @@ static void init(void)
 	DDRD &= ~(_BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR));
 	PORTD |= _BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR);
 
-	MCUCR |= _BV(ISC11) | _BV(ISC01) | _BV(ISC00);
+	// Falling edge on INT0, falling edge on INT1
+	MCUCR |= _BV(ISC11) | _BV(ISC01);
+
+	// Enable INT0 and INT1 interrupts
 	GIMSK |= _BV(INT1) | _BV(INT0);
 
 	sei();
@@ -38,7 +42,24 @@ ISR(INT0_vect)
 
 ISR(INT1_vect)
 {
-    repulsor_shot();
+	uint8_t press_counter = 0;
+
+	while (!(PIND & _BV(GPIO_SHOT_REPULSOR)) && press_counter < 10) {
+		_delay_ms(200);
+		press_counter++;
+	}
+
+	// short press of repulsor button
+	if (press_counter == 1) {
+		voice_play(SOUND_JARVIS_BATTERY_FULL_3);
+	}
+
+	// long press of repulsor button
+	if (press_counter == 10) {
+		repulsor_shot();
+	}
+
+	sei();
 }
 
 int main(void)
