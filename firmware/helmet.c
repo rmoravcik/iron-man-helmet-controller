@@ -55,9 +55,12 @@ void helmet_close(void)
 	OCR1B = 2200;
 
 	_delay_ms(700);
-	set_eyes(EYES_ON);
 
 	pwm_disable();
+
+	set_eyes(EYES_BLINK);
+	set_eyes(EYES_FADE_IN);
+	set_eyes(EYES_ON);
 
 	// WORKAROUND: Helmet is sometimes opening/closing automatically
 	// wihout pushing a button, so wait here 3 second.

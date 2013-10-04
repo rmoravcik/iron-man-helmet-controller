@@ -3,7 +3,10 @@
 
 enum {
 	EYES_OFF = 0,
-	EYES_ON
+	EYES_ON,
+	EYES_BLINK,
+	EYES_FADE_IN,
+	EYES_FADE_OUT,
 };
 
 void eyes_init(void);
