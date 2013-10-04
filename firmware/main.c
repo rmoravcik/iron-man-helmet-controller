@@ -45,6 +45,7 @@ int main(void)
 {
 	init();
 
+	eyes_init();
 	repulsor_init();
 	helmet_init();
 	voice_init();

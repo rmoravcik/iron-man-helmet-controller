@@ -4,6 +4,7 @@
 #include <util/delay.h>
 
 #include "common.h"
+#include "eyes.h"
 #include "helmet.h"
 #include "voice.h"
 
@@ -24,7 +25,7 @@ void helmet_init()
 	TCCR1A = _BV(WGM11);
 	TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS10);
 
-	DDRB |= _BV(GPIO_SERVO1) | _BV(GPIO_SERVO2) | _BV(GPIO_EYES);
+	DDRB |= _BV(GPIO_SERVO1) | _BV(GPIO_SERVO2);
 
 	helmet_open();
 }
@@ -36,11 +37,13 @@ void helmet_open(void)
 	OCR1A = 2200;
 	OCR1B = 900;
 
-	PORTB &= ~_BV(GPIO_EYES);
+	set_eyes(EYES_OFF);
 
 	_delay_ms(700);
 	pwm_disable();
 
+	// WORKAROUND: Helmet is sometimes opening/closing automatically
+	// wihout pushing a button, so wait here 3 second.
 	_delay_ms(3000);
 }
 
@@ -52,10 +55,12 @@ void helmet_close(void)
 	OCR1B = 2200;
 
 	_delay_ms(700);
-	PORTB |= _BV(GPIO_EYES);
+	set_eyes(EYES_ON);
 
 	pwm_disable();
 
+	// WORKAROUND: Helmet is sometimes opening/closing automatically
+	// wihout pushing a button, so wait here 3 second.
 	_delay_ms(3000);
 }
 
