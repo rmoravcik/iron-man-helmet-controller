@@ -16,7 +16,7 @@ void repulsor_init(void)
 
 void repulsor_shot(void)
 {
-	voice_play(REPULSOR);
+	voice_play(SOUND_REPULSOR);
 	_delay_ms(3000);
 
 	PORTD |= _BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR);
@@ -24,11 +24,11 @@ void repulsor_shot(void)
 	PORTD &= ~(_BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR));
 
 	if (!(PIND & _BV(GPIO_SHOT_REPULSOR))) {
-		voice_play(REPULSOR);
+		voice_play(SOUND_REPULSOR);
 	}
 
 //	while (!(PIND & _BV(GPIO_SHOT_REPULSOR))) {
-//		voice_play(REPULSOR);
+//		voice_play(SOUND_REPULSOR);
 //	}
 	PORTD &= ~(_BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR));
 }
