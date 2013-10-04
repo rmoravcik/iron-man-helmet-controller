@@ -44,14 +44,6 @@ void set_eyes(uint8_t cmd)
 	}
 }
 
-uint8_t get_eyes(void)
-{
-	if (PORTB & _BV(GPIO_EYES))
-		return EYES_ON;
-	else
-		return EYES_OFF;
-}
-
 static void eyes_blink(void)
 {
 	PORTB &= ~_BV(GPIO_EYES);

@@ -2,14 +2,14 @@
 #define HELMET_H
 
 enum {
-	SERVO1 = 0,
-	SERVO2
+	HELMET_CLOSED = 0,
+	HELMET_OPEN
 };
 
 void helmet_init(void);
 
 void helmet_open(void);
 void helmet_close(void);
-uint8_t helmet_is_closed(void);
+uint8_t helmet_state(void);
 
 #endif // HELMET_H

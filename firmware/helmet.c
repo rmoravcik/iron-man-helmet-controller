@@ -4,9 +4,7 @@
 #include <util/delay.h>
 
 #include "common.h"
-#include "eyes.h"
 #include "helmet.h"
-#include "voice.h"
 
 static void pwm_enable(void)
 {
@@ -37,14 +35,8 @@ void helmet_open(void)
 	OCR1A = 2200;
 	OCR1B = 900;
 
-	set_eyes(EYES_OFF);
-
 	_delay_ms(700);
 	pwm_disable();
-
-	// WORKAROUND: Helmet is sometimes opening/closing automatically
-	// wihout pushing a button, so wait here 3 second.
-	_delay_ms(3000);
 }
 
 void helmet_close(void)
@@ -57,20 +49,13 @@ void helmet_close(void)
 	_delay_ms(700);
 
 	pwm_disable();
-
-	set_eyes(EYES_BLINK);
-	set_eyes(EYES_FADE_IN);
-	set_eyes(EYES_ON);
-
-	// WORKAROUND: Helmet is sometimes opening/closing automatically
-	// wihout pushing a button, so wait here 3 second.
-	_delay_ms(3000);
 }
 
-uint8_t helmet_is_closed(void)
+uint8_t helmet_state(void)
 {
+	// FIXME: Replace with check on PWM registers
 	if (PORTB & _BV(GPIO_EYES))
-		return 1;
+		return HELMET_CLOSED;
 	else
-		return 0;
+		return HELMET_OPEN;
 }

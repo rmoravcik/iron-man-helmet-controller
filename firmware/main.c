@@ -33,11 +33,46 @@ static void init(void)
 
 ISR(INT0_vect)
 {
-	if (helmet_is_closed()) {
-		helmet_open();
-	} else {
-		helmet_close();
+	uint8_t press_counter = 0;
+
+	while (!(PIND & _BV(GPIO_OPEN_HELMET)) && press_counter < 10) {
+		_delay_ms(200);
+		press_counter++;
 	}
+
+	// short press of helmet button
+	if (press_counter == 1) {
+		if (helmet_state() == HELMET_CLOSED) {
+			voice_play(SOUND_JARVIS_BATTERY_FULL_2);
+		} else {
+			voice_play(SOUND_JARVIS_EARLY_TO_RISE);
+		}
+	}
+
+	// long press of helmet button
+	if (press_counter == 10) {
+		if (helmet_state() == HELMET_CLOSED) {
+			// turn off eyes
+			set_eyes(EYES_FADE_OUT);
+			set_eyes(EYES_OFF);
+
+			// open helmet
+			helmet_open();
+		} else {
+			// close helmet
+			helmet_close();
+
+			// turn on eyes
+			set_eyes(EYES_BLINK);
+			set_eyes(EYES_FADE_IN);
+			set_eyes(EYES_ON);
+
+			// play welcome message
+			voice_play(SOUND_JARVIS_SCREEN_ON);
+		}
+	}
+
+	sei();
 }
 
 ISR(INT1_vect)
@@ -51,12 +86,19 @@ ISR(INT1_vect)
 
 	// short press of repulsor button
 	if (press_counter == 1) {
-		voice_play(SOUND_JARVIS_BATTERY_FULL_3);
+		if (helmet_state() == HELMET_CLOSED) {
+			voice_play(SOUND_JARVIS_BATTERY_FULL_3);
+		} else {
+			voice_play(SOUND_JARVIS_ARC_REACTOR_MODE);
+		}
 	}
 
 	// long press of repulsor button
 	if (press_counter == 10) {
-		repulsor_shot();
+		if (helmet_state() == HELMET_CLOSED) {
+			repulsor_shot();
+		} else {
+		}
 	}
 
 	sei();
