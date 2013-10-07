@@ -1,8 +1,8 @@
-#ifndef EYES_H
-#define EYES_H
+#ifndef BATTERY_H
+#define BATTERY_H
 
 void battery_init(void);
 
-void battery_get_capacity();
+void battery_get_capacity(void);
 
-#endif // EYES_H
+#endif // BATTERY_H

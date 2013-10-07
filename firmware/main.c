@@ -8,10 +8,13 @@
 #include <util/delay.h>
 
 #include "common.h"
+#include "battery.h"
 #include "eyes.h"
 #include "helmet.h"
 #include "repulsor.h"
 #include "voice.h"
+
+#define VOICE_SILENT
 
 static void init(void)
 {
@@ -115,7 +118,7 @@ int main(void)
 	voice_init();
 
 #ifdef VOICE_SILENT
-	voice_set_volume(SOUND_VOLUME_2);
+	voice_set_volume(SOUND_VOLUME_1);
 #endif
 
 	battery_get_capacity();
