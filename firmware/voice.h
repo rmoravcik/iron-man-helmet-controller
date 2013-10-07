@@ -65,9 +65,23 @@ enum {
 	SOUND_REPULSOR
 };
 
+enum {
+	SOUND_VOLUME_0 = 0xE0,
+	SOUND_VOLUME_1,
+	SOUND_VOLUME_2,
+	SOUND_VOLUME_3,
+	SOUND_VOLUME_4,
+	SOUND_VOLUME_5,
+	SOUND_VOLUME_6,
+	SOUND_VOLUME_7,
+};
+
 void voice_init(void);
 
-void voice_play(int sound);
+void voice_play(uint8_t sound);
+
+void voice_set_volume(uint8_t volume);
+
 uint8_t voice_is_busy(void);
 
 #endif // VOICE_H

@@ -6,7 +6,7 @@
 #include "common.h"
 #include "voice.h"
 
-static void voice_send(int command);
+static void voice_send(uint8_t command);
 
 void voice_init(void)
 {
@@ -19,7 +19,7 @@ void voice_init(void)
 	PORTD |= _BV(GPIO_WT588_DATA);
 }
 
-void voice_play(int sound)
+void voice_play(uint8_t sound)
 {
 	while (voice_is_busy()) {
 	}
@@ -27,7 +27,12 @@ void voice_play(int sound)
 	voice_send(sound);
 }
 
-static void voice_send(int command)
+void voice_set_volume(uint8_t volume)
+{
+	voice_send(volume);
+}
+
+static void voice_send(uint8_t command)
 {
 	uint8_t i;
 
