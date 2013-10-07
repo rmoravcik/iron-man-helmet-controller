@@ -6,33 +6,44 @@
 #include "common.h"
 #include "voice.h"
 
-static void voice_send(uint8_t command);
+static uint8_t voice_is_busy(void);
+static void voice_send_command(uint8_t command);
 
 void voice_init(void)
 {
-//	DDRD |= _BV(GPIO_WT588_RESET) | _BV(GPIO_WT588_DATA);
+	// set DATA pin as an output
 	DDRD |= _BV(GPIO_WT588_DATA);
-//	DDRD &= ~_BV(GPIO_WT588_BUSY);
+
+	// set BUSY and RESET pins as an inputs
 	DDRD &= ~(_BV(GPIO_WT588_BUSY) | _BV(GPIO_WT588_RESET));
 
-//	PORTD |= _BV(GPIO_WT588_RESET) | _BV(GPIO_WT588_DATA);
+	// set DATA pin to high
 	PORTD |= _BV(GPIO_WT588_DATA);
 }
 
-void voice_play(uint8_t sound)
+void voice_play_sound(uint8_t sound)
 {
 	while (voice_is_busy()) {
 	}
 
-	voice_send(sound);
+	voice_send_command(sound);
 }
 
 void voice_set_volume(uint8_t volume)
 {
-	voice_send(volume);
+	voice_send_command(volume);
 }
 
-static void voice_send(uint8_t command)
+static uint8_t voice_is_busy(void)
+{
+	if (PIND & _BV(GPIO_WT588_BUSY)) {
+		return 0;
+	} else {
+		return 1;
+	}
+}
+
+static void voice_send_command(uint8_t command)
 {
 	uint8_t i;
 
@@ -60,11 +71,3 @@ static void voice_send(uint8_t command)
 	_delay_ms(20);
 }
 
-uint8_t voice_is_busy(void)
-{
-	if (PIND & _BV(GPIO_WT588_BUSY)) {
-		return 0;
-	} else {
-		return 1;
-	}
-}

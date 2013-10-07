@@ -78,10 +78,7 @@ enum {
 
 void voice_init(void);
 
-void voice_play(uint8_t sound);
-
+void voice_play_sound(uint8_t sound);
 void voice_set_volume(uint8_t volume);
-
-uint8_t voice_is_busy(void);
 
 #endif // VOICE_H
