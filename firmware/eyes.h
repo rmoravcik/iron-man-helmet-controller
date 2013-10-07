@@ -11,6 +11,6 @@ enum {
 
 void eyes_init(void);
 
-void set_eyes(uint8_t cmd);
+void eyes_set_mode(uint8_t mode);
 
 #endif // EYES_H

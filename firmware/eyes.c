@@ -19,9 +19,9 @@ void eyes_init()
 	DDRB |= _BV(GPIO_EYES);
 }
 
-void set_eyes(uint8_t cmd)
+void eyes_set_mode(uint8_t mode)
 {
-	switch (cmd) {
+	switch (mode) {
 		case EYES_OFF:
 			PORTB &= ~_BV(GPIO_EYES);
 			break;

@@ -56,8 +56,8 @@ ISR(INT0_vect)
 	if (press_counter == 10) {
 		if (helmet_state() == HELMET_CLOSED) {
 			// turn off eyes
-			set_eyes(EYES_FADE_OUT);
-			set_eyes(EYES_OFF);
+			eyes_set_mode(EYES_FADE_OUT);
+			eyes_set_mode(EYES_OFF);
 
 			// open helmet
 			helmet_open();
@@ -66,9 +66,9 @@ ISR(INT0_vect)
 			helmet_close();
 
 			// turn on eyes
-			set_eyes(EYES_BLINK);
-			set_eyes(EYES_FADE_IN);
-			set_eyes(EYES_ON);
+			eyes_set_mode(EYES_BLINK);
+			eyes_set_mode(EYES_FADE_IN);
+			eyes_set_mode(EYES_ON);
 
 			// play welcome message
 			voice_play_sound(SOUND_JARVIS_SCREEN_ON);
