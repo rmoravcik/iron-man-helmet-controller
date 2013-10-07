@@ -23,12 +23,14 @@ static void init(void)
 
 	DDRD = 0xff;
 	DDRD &= ~(_BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR));
+
+	// enable pull ups on helmet and repulsor inputs
 	PORTD |= _BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR);
 
-	// Falling edge on INT0, falling edge on INT1
+	// falling edge on INT0, falling edge on INT1
 	MCUCR |= _BV(ISC11) | _BV(ISC01);
 
-	// Enable INT0 and INT1 interrupts
+	// enable INT0 and INT1 interrupts
 	GIMSK |= _BV(INT1) | _BV(INT0);
 
 	sei();
@@ -56,7 +58,6 @@ ISR(INT0_vect)
 	if (press_counter == 10) {
 		if (helmet_state() == HELMET_CLOSED) {
 			// turn off eyes
-			eyes_set_mode(EYES_FADE_OUT);
 			eyes_set_mode(EYES_OFF);
 
 			// open helmet

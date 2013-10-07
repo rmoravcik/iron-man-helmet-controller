@@ -44,6 +44,7 @@ void eyes_set_mode(uint8_t mode)
 	}
 }
 
+// takes 200ms
 static void eyes_blink(void)
 {
 	PORTB &= ~_BV(GPIO_EYES);
@@ -56,6 +57,7 @@ static void eyes_blink(void)
 	_delay_ms(50);
 }
 
+// takes 3000ms
 static void eyes_fade_effect(uint8_t mode)
 {
 	uint8_t step, i = 0;

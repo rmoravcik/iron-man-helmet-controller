@@ -35,7 +35,9 @@ void helmet_open(void)
 	OCR1A = 2200;
 	OCR1B = 900;
 
+	// wait till helmet is open
 	_delay_ms(700);
+
 	pwm_disable();
 }
 
@@ -46,6 +48,7 @@ void helmet_close(void)
 	OCR1A = 900;
 	OCR1B = 2200;
 
+	// wait till helmet is closed
 	_delay_ms(700);
 
 	pwm_disable();
