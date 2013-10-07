@@ -53,9 +53,9 @@ void helmet_close(void)
 
 uint8_t helmet_state(void)
 {
-	// FIXME: Replace with check on PWM registers
-	if (PORTB & _BV(GPIO_EYES))
+	if ((OCR1A == 900) && (OCR1B == 2200)) {
 		return HELMET_CLOSED;
-	else
+	} else {
 		return HELMET_OPEN;
+	}
 }
