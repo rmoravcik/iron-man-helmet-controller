@@ -45,6 +45,9 @@ ISR(INT0_vect)
 			// turn off eyes
 			eyes_set_mode(EYES_OFF);
 
+			// wait for 200ms before opening helmet
+			_delay_ms(200);
+
 			// open helmet
 			helmet_open();
 		} else {
