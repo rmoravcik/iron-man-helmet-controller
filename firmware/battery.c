@@ -3,12 +3,9 @@
 #include <avr/io.h>
 
 #include "common.h"
-#include "voice.h"
 #include "battery.h"
 
 uint16_t adc_offset = 0;
-
-static uint8_t battery_measure_capacity(void);
 
 void battery_init(void)
 {
@@ -38,31 +35,7 @@ void battery_init(void)
 	ADMUX &= ~(_BV(MUX3) | _BV(MUX1));
 }
 
-void battery_get_capacity(void)
-{
-	uint8_t capacity = battery_measure_capacity();
-
-	if (capacity == 0) {
-		voice_play_sound(SOUND_JARVIS_BATTERY_LOW_1);
-	} else {
-		voice_play_sound(SOUND_JARVIS_BATTERY_POWER_AT);
-
-		if (capacity <= 20) {
-			voice_play_sound(SOUND_JARVIS_BATTERY_1 + (capacity - 1));
-		} else {
-			uint8_t remainder = capacity % 10;
-
-			voice_play_sound(SOUND_JARVIS_BATTERY_20 + ((capacity / 10) - 2));
-
-			if (remainder > 0) {
-				voice_play_sound(SOUND_JARVIS_BATTERY_1 + (remainder - 1));
-			}
-		}
-		voice_play_sound(SOUND_JARVIS_BATTERY_PERCENT);
-	}
-}
-
-static uint8_t battery_measure_capacity(void)
+uint8_t battery_get_capacity(void)
 {
 	uint8_t capacity = 0;
 

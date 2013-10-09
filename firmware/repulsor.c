@@ -5,7 +5,6 @@
 
 #include "common.h"
 #include "repulsor.h"
-#include "voice.h"
 
 void repulsor_init(void)
 {
@@ -16,9 +15,6 @@ void repulsor_init(void)
 
 void repulsor_shot(void)
 {
-	voice_play_sound(SOUND_REPULSOR);
-	_delay_ms(1000);
-
 	PORTD |= _BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR);
 	_delay_ms(200);
 	PORTD &= ~(_BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR));

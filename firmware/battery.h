@@ -3,6 +3,6 @@
 
 void battery_init(void);
 
-void battery_get_capacity(void);
+uint8_t battery_get_capacity(void);
 
 #endif // BATTERY_H

@@ -14,28 +14,13 @@
 #include "repulsor.h"
 #include "voice.h"
 
-#define VOICE_SILENT
+#define VOICE_SILENT 1
 
-static void init(void)
-{
-	DDRB = 0xff;
-	DDRC = 0xff;
+static void init(void);
+static void battery_report_capacity(void);
+static void battery_warn_notice(void);
 
-	DDRD = 0xff;
-	DDRD &= ~(_BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR));
-
-	// enable pull ups on helmet and repulsor inputs
-	PORTD |= _BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR);
-
-	// falling edge on INT0, falling edge on INT1
-	MCUCR |= _BV(ISC11) | _BV(ISC01);
-
-	// enable INT0 and INT1 interrupts
-	GIMSK |= _BV(INT1) | _BV(INT0);
-
-	sei();
-}
-
+// helmet button
 ISR(INT0_vect)
 {
 	uint8_t press_counter = 0;
@@ -79,6 +64,7 @@ ISR(INT0_vect)
 	sei();
 }
 
+// repulsor button
 ISR(INT1_vect)
 {
 	uint8_t press_counter = 0;
@@ -100,8 +86,16 @@ ISR(INT1_vect)
 	// long press of repulsor button
 	if (press_counter == 10) {
 		if (helmet_state() == HELMET_CLOSED) {
+			// helmet is closed, we can shot from repulsor
+			voice_play_sound(SOUND_REPULSOR);
+
+			// simulator shot blast after 1sec
+			_delay_ms(1000);
+
 			repulsor_shot();
 		} else {
+			// helmet is open
+			// FIXME: what to do now?
 		}
 	}
 
@@ -122,10 +116,72 @@ int main(void)
 	voice_set_volume(SOUND_VOLUME_1);
 #endif
 
-	battery_get_capacity();
+	// report battery capacity after power on
+	battery_report_capacity();
 
+	// main loop
 	while(1) {
 	}
 
 	return 0;
+}
+
+static void init(void)
+{
+	DDRB = 0xff;
+	DDRC = 0xff;
+
+	DDRD = 0xff;
+	DDRD &= ~(_BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR));
+
+	// enable pull ups on helmet and repulsor inputs
+	PORTD |= _BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR);
+
+	// falling edge on INT0, falling edge on INT1
+	MCUCR |= _BV(ISC11) | _BV(ISC01);
+
+	// enable INT0 and INT1 interrupts
+	GIMSK |= _BV(INT1) | _BV(INT0);
+
+	sei();
+}
+
+static void battery_report_capacity(void)
+{
+	// read battery capacity
+	uint8_t capacity = battery_get_capacity();
+
+	if (capacity == 0) {
+		voice_play_sound(SOUND_JARVIS_BATTERY_LOW_1);
+	} else {
+		voice_play_sound(SOUND_JARVIS_BATTERY_POWER_AT);
+
+		if (capacity <= 20) {
+			voice_play_sound(SOUND_JARVIS_BATTERY_1 + (capacity - 1));
+		} else {
+			uint8_t remainder = capacity % 10;
+
+			voice_play_sound(SOUND_JARVIS_BATTERY_20 + ((capacity / 10) - 2));
+
+			if (remainder > 0) {
+				voice_play_sound(SOUND_JARVIS_BATTERY_1 + (remainder - 1));
+			}
+		}
+		voice_play_sound(SOUND_JARVIS_BATTERY_PERCENT);
+	}
+}
+
+static void battery_warn_notice(void)
+{
+	// read battery capacity
+	uint8_t capacity = battery_get_capacity();
+
+	if (capacity < 20) {
+		// blink with eyes if helmet is closed
+		if (helmet_state() == HELMET_CLOSED) {
+			eyes_set_mode(EYES_BLINK);
+		}
+
+		voice_play_sound(SOUND_JARVIS_BATTERY_LOW_1);
+	}
 }
