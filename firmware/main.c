@@ -56,8 +56,8 @@ ISR(INT0_vect)
 			eyes_set_mode(EYES_FADE_IN);
 			eyes_set_mode(EYES_ON);
 
-			// play welcome message
-			voice_play_sound(SOUND_JARVIS_SCREEN_ON);
+			// check if battery is not dead
+			battery_warn_notice();
 		}
 	}
 
@@ -87,12 +87,15 @@ ISR(INT1_vect)
 	if (press_counter == 10) {
 		if (helmet_state() == HELMET_CLOSED) {
 			// helmet is closed, we can shot from repulsor
-			voice_play_sound(SOUND_REPULSOR);
+			voice_play_sound_no_wait(SOUND_REPULSOR);
 
-			// simulator shot blast after 1sec
+			// simulate shot after 1sec
 			_delay_ms(1000);
 
 			repulsor_shot();
+
+			// check if battery is not dead
+			battery_warn_notice();
 		} else {
 			// helmet is open
 			// FIXME: what to do now?
