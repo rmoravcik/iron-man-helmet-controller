@@ -27,6 +27,7 @@
 #include "effects.h"
 #include "eyes.h"
 #include "helmet.h"
+#include "reactor.h"
 #include "repulsor.h"
 #include "voice.h"
 
@@ -73,7 +74,6 @@ ISR(INT0_vect)
 			// turn on eyes
 			eyes_set_mode(MODE_BLINK);
 			eyes_set_mode(MODE_FADE_IN);
-			eyes_set_mode(MODE_ON);
 
 			// check if battery is not dead
 			battery_warn_notice();
@@ -130,9 +130,13 @@ int main(void)
 
 	battery_init();
 	eyes_init();
+	reactor_init();
 	repulsor_init();
 	helmet_init();
 	voice_init();
+
+	// enable reactor
+	reactor_set_mode(MODE_FADE_IN);
 
 #ifdef VOICE_SILENT
 	voice_set_volume(SOUND_VOLUME_1);

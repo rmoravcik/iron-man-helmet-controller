@@ -79,9 +79,9 @@ static void effect_fade_effect(uint8_t gpio, uint8_t mode)
 	uint8_t step, i = 0;
 	uint8_t time, off_time, on_time;
 
-	// fade-in in 50 steps
+	// do fade effect in 50 steps
 	for (step = 0; step <= 50; step++) {
-		// calculate on/off times for a signal with period 1kHz
+		// calculate on/off times for PWM with period 1kHz
 		if (mode == FADE_IN) {
 			on_time = 2 * step;
 			off_time = 100 - on_time;
@@ -90,7 +90,7 @@ static void effect_fade_effect(uint8_t gpio, uint8_t mode)
 			on_time = 100 - off_time;
 		}
 
-		// remain 30 ms on each step
+		// each PWM step is taking 60ms
 		for (i = 0; i < 30; i++) {
 			PORTB &= ~_BV(gpio);
 
@@ -104,5 +104,13 @@ static void effect_fade_effect(uint8_t gpio, uint8_t mode)
 				_delay_us(20);
 			}
 		}
+	}
+
+	// if fade in, leave gpio asserted high
+	// else set it low
+	if (mode == FADE_IN) {
+		PORTB |= _BV(gpio);
+	} else {
+		PORTB &= ~_BV(gpio);
 	}
 }
