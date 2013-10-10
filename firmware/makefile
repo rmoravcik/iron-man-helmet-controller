@@ -9,6 +9,7 @@
 
 # Microcontroller Type
 MCU = atmega8
+F_CPU = 1000000
 
 # Target file name (without extension).
 TARGET = IronMan
@@ -28,7 +29,7 @@ OPT = s
 FORMAT = ihex
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = main.c battery.c eyes.c helmet.c repulsor.c voice.c
+SRC = main.c battery.c effects.c eyes.c helmet.c reactor.c repulsor.c voice.c
 
 # List Assembler source files here.
 # Make them always end in a capital .S.  Files ending in a lowercase .s
@@ -50,7 +51,7 @@ EXTRAINCDIRS =
 #  -Wall...:  warning level
 #  -Wa,...:   tell GCC to pass this to the assembler.
 #    -ahlms:  create assembler listing
-CFLAGS = -g -O$(OPT) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wstrict-prototypes -Wa,-adhlns=$(<:.c=.lst) $(patsubst %,-I%,$(EXTRAINCDIRS))
+CFLAGS = -g -O$(OPT) -DF_CPU=$(F_CPU) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums -Wall -Wstrict-prototypes -Wa,-adhlns=$(<:.c=.lst) $(patsubst %,-I%,$(EXTRAINCDIRS))
 
 # Set a "language standard" compiler flag.
 #   Unremark just one line below to set the language standard to use.

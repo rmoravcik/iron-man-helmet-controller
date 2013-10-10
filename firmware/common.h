@@ -1,10 +1,13 @@
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <avr/io.h>
+
 #define GPIO_EYES		PB0
 #define GPIO_SERVO1		PB1
 #define GPIO_SERVO2		PB2
 #define GPIO_WT588_BUSY		PB6
+#define GPIO_REACTOR		PB7
 
 #define GPIO_BATTERY_SENSE	PC5
 

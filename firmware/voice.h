@@ -1,6 +1,8 @@
 #ifndef VOICE_H
 #define VOICE_H
 
+#include <stdint.h>
+
 enum {
 	SOUND_IM_SUIT_01 = 0,
 	SOUND_IM_SUIT_02,

@@ -1,14 +1,11 @@
-#define F_CPU 1000000UL
-
 #include <stdlib.h>
 
-#include <avr/io.h>
 #include <avr/interrupt.h>
-
 #include <util/delay.h>
 
 #include "common.h"
 #include "battery.h"
+#include "effects.h"
 #include "eyes.h"
 #include "helmet.h"
 #include "repulsor.h"
@@ -43,7 +40,7 @@ ISR(INT0_vect)
 	if (press_counter == 10) {
 		if (helmet_state() == HELMET_CLOSED) {
 			// turn off eyes
-			eyes_set_mode(EYES_OFF);
+			eyes_set_mode(MODE_OFF);
 
 			// wait for 200ms before opening helmet
 			_delay_ms(200);
@@ -55,9 +52,9 @@ ISR(INT0_vect)
 			helmet_close();
 
 			// turn on eyes
-			eyes_set_mode(EYES_BLINK);
-			eyes_set_mode(EYES_FADE_IN);
-			eyes_set_mode(EYES_ON);
+			eyes_set_mode(MODE_BLINK);
+			eyes_set_mode(MODE_FADE_IN);
+			eyes_set_mode(MODE_ON);
 
 			// check if battery is not dead
 			battery_warn_notice();
@@ -185,7 +182,7 @@ static void battery_warn_notice(void)
 	if (capacity < 20) {
 		// blink with eyes if helmet is closed
 		if (helmet_state() == HELMET_CLOSED) {
-			eyes_set_mode(EYES_BLINK);
+			eyes_set_mode(MODE_BLINK);
 		}
 
 		voice_play_sound(SOUND_JARVIS_BATTERY_LOW_1);

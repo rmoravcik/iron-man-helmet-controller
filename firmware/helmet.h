@@ -1,6 +1,8 @@
 #ifndef HELMET_H
 #define HELMET_H
 
+#include <stdint.h>
+
 enum {
 	HELMET_CLOSED = 0,
 	HELMET_OPEN
