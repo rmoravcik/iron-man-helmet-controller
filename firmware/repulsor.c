@@ -27,19 +27,19 @@ void repulsor_init(void)
 {
 	effect_init(GPIO_REPULSOR_PWR);
 
-	// set left/right repuslor pins as an output
-	DDRD |= _BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR);
+	// set repuslor blast pins as an output
+	DDRD |= _BV(GPIO_REPULSOR_BLAST);
 
-	// set left/right repulsor pins to low
-	PORTD &= ~(_BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR));
+	// set repulsor blast pins to low
+	PORTD &= ~_BV(GPIO_REPULSOR_BLAST);
 }
 
-void repulsor_shot(void)
+void repulsor_blast(void)
 {
 	// simulate repulsor blast
-	PORTD |= _BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR);
+	PORTD |= _BV(GPIO_REPULSOR_BLAST);
 	_delay_ms(200);
-	PORTD &= ~(_BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR));
+	PORTD &= ~_BV(GPIO_REPULSOR_BLAST);
 }
 
 void repulsor_set_mode(uint8_t mode)

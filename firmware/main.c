@@ -41,7 +41,7 @@ ISR(INT0_vect)
 {
 	uint8_t press_counter = 0;
 
-	while (!(PIND & _BV(GPIO_OPEN_HELMET)) && press_counter < 10) {
+	while (!(PIND & _BV(GPIO_HELMET_BUTTON)) && press_counter < 10) {
 		_delay_ms(200);
 		press_counter++;
 	}
@@ -87,7 +87,7 @@ ISR(INT1_vect)
 {
 	uint8_t press_counter = 0;
 
-	while (!(PIND & _BV(GPIO_SHOT_REPULSOR)) && press_counter < 10) {
+	while (!(PIND & _BV(GPIO_REPULSOR_BUTTON)) && press_counter < 10) {
 		_delay_ms(200);
 		press_counter++;
 	}
@@ -110,7 +110,7 @@ ISR(INT1_vect)
 			// simulate shot after 1sec
 			_delay_ms(1000);
 
-			repulsor_shot();
+			repulsor_blast();
 
 			// check if battery is not dead
 			battery_warn_notice();
@@ -156,10 +156,10 @@ static void init(void)
 	DDRC = 0xff;
 
 	DDRD = 0xff;
-	DDRD &= ~(_BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR));
+	DDRD &= ~(_BV(GPIO_HELMET_BUTTON) | _BV(GPIO_REPULSOR_BUTTON));
 
 	// enable pull ups on helmet and repulsor inputs
-	PORTD |= _BV(GPIO_OPEN_HELMET) | _BV(GPIO_SHOT_REPULSOR);
+	PORTD |= _BV(GPIO_HELMET_BUTTON) | _BV(GPIO_REPULSOR_BUTTON);
 
 	// falling edge on INT0, falling edge on INT1
 	MCUCR |= _BV(ISC11) | _BV(ISC01);
