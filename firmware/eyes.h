@@ -24,6 +24,8 @@
 
 void eyes_init(void);
 
-void eyes_set_mode(uint8_t mode);
+void eyes_power_up(void);
+void eyes_power_down(void);
+void eyes_power_failure(void);
 
 #endif // EYES_H

@@ -22,7 +22,10 @@
 
 void repulsor_init(void);
 
+void repulsor_power_up(void);
+void repulsor_power_down(void);
+void repulsor_power_failure(void);
+
 void repulsor_blast(void);
-void repulsor_set_mode(uint8_t mode);
 
 #endif // REPULSOR_H

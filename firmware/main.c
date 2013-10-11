@@ -24,7 +24,6 @@
 
 #include "common.h"
 #include "battery.h"
-#include "effects.h"
 #include "eyes.h"
 #include "helmet.h"
 #include "repulsor.h"
@@ -59,10 +58,7 @@ ISR(INT0_vect)
 	if (press_counter == 10) {
 		if (helmet_state() == HELMET_CLOSED) {
 			// turn off eyes
-			eyes_set_mode(MODE_OFF);
-
-			// wait for 200ms before opening helmet
-			_delay_ms(200);
+			eyes_power_down();
 
 			// open helmet
 			helmet_open();
@@ -71,8 +67,7 @@ ISR(INT0_vect)
 			helmet_close();
 
 			// turn on eyes
-			eyes_set_mode(MODE_BLINK);
-			eyes_set_mode(MODE_FADE_IN);
+			eyes_power_up();
 
 			// check if battery is not dead
 			battery_warn_notice();
@@ -134,10 +129,10 @@ int main(void)
 	voice_init();
 
 	// enable repulsor
-	repulsor_set_mode(MODE_FADE_IN);
+	repulsor_power_up();
 
 #ifdef VOICE_SILENT
-	voice_set_volume(SOUND_VOLUME_7);
+	voice_set_volume(SOUND_VOLUME_1);
 #endif
 
 	// report battery capacity after power on
@@ -203,11 +198,11 @@ static void battery_warn_notice(void)
 	if (capacity < 20) {
 		// blink with eyes if helmet is closed
 		if (helmet_state() == HELMET_CLOSED) {
-			eyes_set_mode(MODE_BLINK);
+			eyes_power_failure();
 		}
 
 		// blink with repulsor
-		repulsor_set_mode(MODE_BLINK);
+		repulsor_power_failure();
 
 		// play warn notice that battery is almost dead
 		voice_play_sound(SOUND_JARVIS_BATTERY_LOW_1);

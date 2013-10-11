@@ -17,6 +17,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#include <util/delay.h>
+
 #include "common.h"
 #include "effects.h"
 #include "eyes.h"
@@ -26,7 +28,21 @@ void eyes_init()
 	effect_init(GPIO_EYES);
 }
 
-void eyes_set_mode(uint8_t mode)
+void eyes_power_up(void)
 {
-	effect_set_mode(GPIO_EYES, mode);
+	effect_set_mode(GPIO_EYES, MODE_BLINK);
+	effect_set_mode(GPIO_EYES, MODE_FADE_IN);
+}
+
+void eyes_power_down(void)
+{
+	effect_set_mode(GPIO_EYES, MODE_OFF);
+
+	// wait for 200ms before opening helmet
+	_delay_ms(200);
+}
+
+void eyes_power_failure(void)
+{
+	effect_set_mode(GPIO_EYES, MODE_BLINK);
 }

@@ -34,6 +34,21 @@ void repulsor_init(void)
 	PORTD &= ~_BV(GPIO_REPULSOR_BLAST);
 }
 
+void repulsor_power_up(void)
+{
+	effect_set_mode(GPIO_REPULSOR_PWR, MODE_FADE_IN);
+}
+
+void repulsor_power_down(void)
+{
+	effect_set_mode(GPIO_REPULSOR_PWR, MODE_FADE_OUT);
+}
+
+void repulsor_power_failure(void)
+{
+	effect_set_mode(GPIO_REPULSOR_PWR, MODE_BLINK);
+}
+
 void repulsor_blast(void)
 {
 	// simulate repulsor blast
@@ -42,7 +57,3 @@ void repulsor_blast(void)
 	PORTD &= ~_BV(GPIO_REPULSOR_BLAST);
 }
 
-void repulsor_set_mode(uint8_t mode)
-{
-	effect_set_mode(GPIO_REPULSOR_PWR, mode);
-}
