@@ -20,10 +20,13 @@
 #include <util/delay.h>
 
 #include "common.h"
+#include "effects.h"
 #include "repulsor.h"
 
 void repulsor_init(void)
 {
+	effect_init(GPIO_REPULSOR_PWR);
+
 	// set left/right repuslor pins as an output
 	DDRD |= _BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR);
 
@@ -37,4 +40,9 @@ void repulsor_shot(void)
 	PORTD |= _BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR);
 	_delay_ms(200);
 	PORTD &= ~(_BV(GPIO_LEFT_REPULSOR) | _BV(GPIO_RIGHT_REPULSOR));
+}
+
+void repulsor_set_mode(uint8_t mode)
+{
+	effect_set_mode(GPIO_REPULSOR_PWR, mode);
 }

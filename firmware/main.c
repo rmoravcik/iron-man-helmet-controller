@@ -27,7 +27,6 @@
 #include "effects.h"
 #include "eyes.h"
 #include "helmet.h"
-#include "reactor.h"
 #include "repulsor.h"
 #include "voice.h"
 
@@ -130,16 +129,15 @@ int main(void)
 
 	battery_init();
 	eyes_init();
-	reactor_init();
 	repulsor_init();
 	helmet_init();
 	voice_init();
 
-	// enable reactor
-	reactor_set_mode(MODE_FADE_IN);
+	// enable repulsor
+	repulsor_set_mode(MODE_FADE_IN);
 
 #ifdef VOICE_SILENT
-	voice_set_volume(SOUND_VOLUME_1);
+	voice_set_volume(SOUND_VOLUME_7);
 #endif
 
 	// report battery capacity after power on
@@ -208,6 +206,10 @@ static void battery_warn_notice(void)
 			eyes_set_mode(MODE_BLINK);
 		}
 
+		// blink with repulsor
+		repulsor_set_mode(MODE_BLINK);
+
+		// play warn notice that battery is almost dead
 		voice_play_sound(SOUND_JARVIS_BATTERY_LOW_1);
 	}
 }

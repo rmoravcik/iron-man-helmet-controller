@@ -23,5 +23,6 @@
 void repulsor_init(void);
 
 void repulsor_shot(void);
+void repulsor_set_mode(uint8_t mode);
 
 #endif // REPULSOR_H
